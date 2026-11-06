@@ -1,5 +1,9 @@
 package empleado.usecase;
 
+import empleado.exception.EmpleadoLegajoNullException;
+
+
+import empleado.exception.EmpleadoNoEncontradoException;
 import empleado.modelo.Empleado;
 import empleado.modelo.Puesto;
 import empleado.output.EmpleadoRepository;
@@ -70,6 +74,6 @@ public class BuscarEmpleadoPorLegajoTest {
 
         BuscarEmpleadoPorLegajo usecase = new BuscarEmpleadoPorLegajo(mockEmpleadoRepository);
 
-        assertThrows(EmpleadoLegajoVacioExcpetion.class, () -> usecase.consultar(""));
+        assertThrows(EmpleadoLegajoNullException.class, () -> usecase.consultar(""));
     }
 }
