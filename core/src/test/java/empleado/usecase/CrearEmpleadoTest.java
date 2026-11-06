@@ -1,7 +1,10 @@
 package empleado.usecase;
 
+import empleado.exception.EmpleadoDuplicadoException;
+import empleado.exception.EmpleadoFallaGuardadoException;
 import empleado.modelo.Empleado;
 import empleado.modelo.Puesto;
+import empleado.output.EmpleadoRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -50,7 +53,7 @@ public class CrearEmpleadoTest {
 
         when(mockEmpleadoRepository.existePorLegajo("ABC1234")).thenReturn(true);
 
-        assertThrows(EmpleadoDuplicadoException.class, () -> usecase.ejecutar(
+        assertThrows(EmpleadoDuplicadoException.class, () -> usecase.registrar(
                 Empleado.instance(
                         UUID.randomUUID(),
                         "Guerrero Eduardo Javier",
@@ -71,7 +74,7 @@ public class CrearEmpleadoTest {
         when(mockEmpleadoRepository.existePorLegajo("ABC1234")).thenReturn(false);
         when(mockEmpleadoRepository.guardar(any(Empleado.class))).thenReturn(false);
 
-        assertThrows(EmpleadoFallaGuardadoException.class, () -> usecase.ejecutar(
+        assertThrows(EmpleadoFallaGuardadoException.class, () -> usecase.registrar(
                 Empleado.instance(
                         UUID.randomUUID(),
                         "Guerrero Eduardo Javier",
