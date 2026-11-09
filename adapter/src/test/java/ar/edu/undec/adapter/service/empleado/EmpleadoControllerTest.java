@@ -1,19 +1,21 @@
 package ar.edu.undec.adapter.service.empleado;
 
+import ar.edu.undec.adapter.handler.GlobalExceptionHandler;
+import ar.edu.undec.adapter.service.empleado.controller.EmpleadoController;
 import empleado.exception.EmpleadoDuplicadoException;
+import empleado.exception.EmpleadoInvalidaException;
+import empleado.exception.EmpleadoLegajoNullException;
 import empleado.exception.EmpleadoNoEncontradoException;
 import empleado.modelo.Empleado;
 import empleado.modelo.Puesto;
 import empleado.usecase.BuscarEmpleadoPorLegajo;
 import empleado.usecase.CrearEmpleado;
-import org.hibernate.tool.schema.spi.ExceptionHandler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -70,7 +72,7 @@ public class EmpleadoControllerTest {
                 {
                     "nombre": "Guerrero Eduardo Javier",
                     "legajo": "ABC1234",
-                    "fechaIngreso": "2026-03-21",
+                    "fecha": "2026-03-21",
                     "puesto": "ANALISTA",
                     "sueldo": "500000"
                 
@@ -96,7 +98,7 @@ public class EmpleadoControllerTest {
                 {
                     "nombre": "Guerrero Eduardo Javier",
                     "legajo": "ABC1234",
-                    "fechaIngreso": "2026-03-21",
+                    "fecha": "2026-03-21",
                     "puesto": "ANALISTA",
                     "sueldo": "500000"
                 }
@@ -129,4 +131,38 @@ public class EmpleadoControllerTest {
         mockMvc.perform(get("/api/empleados/ABC1234"))
                 .andExpect(status().isNotFound());
     }
+
+    @Test
+    void registrarEmpleado_datosInvalidos() throws Exception {
+
+        when(mockCrearEmpleado.registrar(any(Empleado.class))).thenThrow(new EmpleadoInvalidaException("Sueldo invalido"));
+
+        String json= """
+                {
+                    "nombre": "Guerrero Eduardo Javier",
+                    "legajo": "ABC1234",
+                    "fecha": "2026-03-21",
+                    "puesto": "ANALISTA",
+                    "sueldo": "500000"
+                }
+                """;
+
+        mockMvc.perform(post("/api/empleados")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(json))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void consultarEmpleado_legajoVacio() throws Exception {
+
+        when(mockBuscarEmpleadoPorLegajo.consultar("%20")).thenThrow(new EmpleadoLegajoNullException("El legajo es obligatorio"));
+
+        mockMvc.perform(get("/api/empleados/%20"))
+                .andExpect(status().isBadRequest());
+
+        verify(mockBuscarEmpleadoPorLegajo).consultar("%20");
+    }
+
+
 }
