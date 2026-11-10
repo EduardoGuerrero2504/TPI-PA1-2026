@@ -3,6 +3,8 @@ package ar.edu.undec.adapter.service.empleado.controller;
 import ar.edu.undec.adapter.service.empleado.mapper.EmpleadoMapper;
 import ar.edu.undec.adapter.service.empleado.model.EmpleadoRequest;
 import ar.edu.undec.adapter.service.empleado.model.EmpleadoResponse;
+import empleado.input.BuscarEmpleadoPorLegajoInput;
+import empleado.input.CrearEmpleadoInput;
 import empleado.modelo.Empleado;
 import empleado.usecase.BuscarEmpleadoPorLegajo;
 import empleado.usecase.CrearEmpleado;
@@ -16,10 +18,10 @@ import java.util.UUID;
 @RequestMapping("/api/empleados")
 public class EmpleadoController {
 
-    private final CrearEmpleado  crearEmpleado;
-    private final BuscarEmpleadoPorLegajo buscarEmpleadoPorLegajo;
+    private final CrearEmpleadoInput  crearEmpleado;
+    private final BuscarEmpleadoPorLegajoInput buscarEmpleadoPorLegajo;
 
-    public EmpleadoController(CrearEmpleado crearEmpleado,  BuscarEmpleadoPorLegajo buscarEmpleadoPorLegajo) {
+    public EmpleadoController(CrearEmpleadoInput crearEmpleado, BuscarEmpleadoPorLegajoInput buscarEmpleadoPorLegajo) {
         this.crearEmpleado = crearEmpleado;
         this.buscarEmpleadoPorLegajo = buscarEmpleadoPorLegajo;
     }
