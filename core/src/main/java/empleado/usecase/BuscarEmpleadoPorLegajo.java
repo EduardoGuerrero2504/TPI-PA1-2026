@@ -2,10 +2,11 @@ package empleado.usecase;
 
 import empleado.exception.EmpleadoLegajoNullException;
 import empleado.exception.EmpleadoNoEncontradoException;
+import empleado.input.BuscarEmpleadoPorLegajoInput;
 import empleado.modelo.Empleado;
 import empleado.output.EmpleadoRepository;
 
-public class BuscarEmpleadoPorLegajo {
+public class BuscarEmpleadoPorLegajo implements BuscarEmpleadoPorLegajoInput {
 
     private EmpleadoRepository mockEmpleadoRepository;
 
@@ -13,6 +14,7 @@ public class BuscarEmpleadoPorLegajo {
         this.mockEmpleadoRepository = mockEmpleadoRepository;
     }
 
+    @Override
     public Empleado consultar(String legajo){
 
         if(legajo == null || legajo.isBlank()) {
