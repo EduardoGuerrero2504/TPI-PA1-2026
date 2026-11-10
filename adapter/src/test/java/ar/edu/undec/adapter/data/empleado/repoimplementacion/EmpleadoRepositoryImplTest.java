@@ -12,9 +12,13 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
 
+
+import org.springframework.context.annotation.Import;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
+@Import(EmpleadoRepositoryImpl.class)
 @Transactional
 public class EmpleadoRepositoryImplTest {
 

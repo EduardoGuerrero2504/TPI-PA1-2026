@@ -6,6 +6,8 @@ import empleado.exception.EmpleadoDuplicadoException;
 import empleado.exception.EmpleadoInvalidaException;
 import empleado.exception.EmpleadoLegajoNullException;
 import empleado.exception.EmpleadoNoEncontradoException;
+import empleado.input.BuscarEmpleadoPorLegajoInput;
+import empleado.input.CrearEmpleadoInput;
 import empleado.modelo.Empleado;
 import empleado.modelo.Puesto;
 import empleado.usecase.BuscarEmpleadoPorLegajo;
@@ -35,10 +37,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class EmpleadoControllerTest {
 
     @Mock
-    private CrearEmpleado mockCrearEmpleado;
+    private CrearEmpleadoInput mockCrearEmpleado;
 
     @Mock
-    private BuscarEmpleadoPorLegajo mockBuscarEmpleadoPorLegajo;
+    private BuscarEmpleadoPorLegajoInput mockBuscarEmpleadoPorLegajo;
 
     private Empleado empleado;
     private MockMvc mockMvc;
