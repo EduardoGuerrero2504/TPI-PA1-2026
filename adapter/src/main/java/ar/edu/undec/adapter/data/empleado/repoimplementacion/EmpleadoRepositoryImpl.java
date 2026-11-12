@@ -7,6 +7,9 @@ import empleado.modelo.Empleado;
 import empleado.output.EmpleadoRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Repository
 public class EmpleadoRepositoryImpl implements EmpleadoRepository {
 
@@ -37,5 +40,17 @@ public class EmpleadoRepositoryImpl implements EmpleadoRepository {
         }
 
         return EmpleadoEntityMapper.toDomain(empleadoEntity);
+    }
+
+    @Override
+    public List<Empleado> listarTodos(){
+
+        List<Empleado> empleados = new ArrayList<>();
+
+        for (EmpleadoEntity empleadoEntity : empleadoCrudRepository.findAll()) {
+            empleados.add(EmpleadoEntityMapper.toDomain(empleadoEntity));
+        }
+
+        return empleados;
     }
 }
