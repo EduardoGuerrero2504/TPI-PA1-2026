@@ -8,10 +8,9 @@ import empleado.exception.EmpleadoLegajoNullException;
 import empleado.exception.EmpleadoNoEncontradoException;
 import empleado.input.BuscarEmpleadoPorLegajoInput;
 import empleado.input.CrearEmpleadoInput;
+import empleado.input.ListarEmpleadosInput;
 import empleado.modelo.Empleado;
 import empleado.modelo.Puesto;
-import empleado.usecase.BuscarEmpleadoPorLegajo;
-import empleado.usecase.CrearEmpleado;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,15 +22,18 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 
 @ExtendWith(MockitoExtension.class)
 public class EmpleadoControllerTest {
@@ -41,6 +43,9 @@ public class EmpleadoControllerTest {
 
     @Mock
     private BuscarEmpleadoPorLegajoInput mockBuscarEmpleadoPorLegajo;
+
+    @Mock
+    private ListarEmpleadosInput mockListarEmpleados;
 
     private Empleado empleado;
     private MockMvc mockMvc;
@@ -57,7 +62,7 @@ public class EmpleadoControllerTest {
                 new BigDecimal("500000")
         );
 
-        EmpleadoController controller = new EmpleadoController(mockCrearEmpleado,mockBuscarEmpleadoPorLegajo);
+        EmpleadoController controller = new EmpleadoController(mockCrearEmpleado,mockBuscarEmpleadoPorLegajo,mockListarEmpleados);
 
         mockMvc = MockMvcBuilders
                 .standaloneSetup(controller)
@@ -164,6 +169,36 @@ public class EmpleadoControllerTest {
                 .andExpect(status().isBadRequest());
 
         verify(mockBuscarEmpleadoPorLegajo).consultar("%20");
+    }
+
+    @Test
+    void listarEmpleados_success() throws Exception {
+
+        List<Empleado> empleados = List.of(empleado);
+
+        when(mockListarEmpleados.listar()).thenReturn(empleados);
+
+
+
+        mockMvc.perform(get("/api/empleados"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].nombre")
+                        .value("Guerrero Eduardo Javier"))
+                .andExpect(jsonPath("$[0].legajo")
+                        .value("ABC1234"));
+        verify(mockListarEmpleados).listar();
+    }
+
+    @Test
+    void listarEmpleados_sinEmpleados() throws Exception {
+
+        when(mockListarEmpleados.listar()).thenReturn(List.of());
+
+        mockMvc.perform(get("/api/empleados"))
+                .andExpect(status().isOk())
+                .andExpect(content().json("[]"));
+
+        verify(mockListarEmpleados).listar();
     }
 
 
