@@ -17,6 +17,12 @@
     <description>Modulo Adaptador (Spring Boot, REST API y Persistencia JPA)</description>
 
     <dependencies>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+        </dependency>
+
         <!-- Dependencia directa del modulo Core -->
         <dependency>
             <groupId>ar.edu.undec</groupId>
