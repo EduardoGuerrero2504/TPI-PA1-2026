@@ -63,7 +63,7 @@ public class ListarEmpleadoTest {
 
         when(mockempleadoRepository.listarTodos()).thenReturn(List.of());
 
-        ListarEmpleados listarEmpleados = new ListarEmpleado(mockempleadoRepository);
+        ListarEmpleados listarEmpleados = new ListarEmpleados(mockempleadoRepository);
 
         List<Empleado> resultado = listarEmpleados.listar();
 
