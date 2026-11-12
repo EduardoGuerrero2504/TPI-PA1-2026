@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 
@@ -82,6 +83,41 @@ public class EmpleadoRepositoryImplTest {
         assertEquals("GHI9012", resultado.getLegajo());
         assertEquals(Puesto.ANALISTA, resultado.getPuesto());
         assertEquals(new BigDecimal("500000"), resultado.getSueldo());
+
+    }
+
+    @Test
+    void listarTodos_empleadoRegistrado(){
+
+        Empleado empleado1 = Empleado.instance(
+                UUID.randomUUID(),
+                "Juan Olivera",
+                "ABC1234",
+                LocalDate.of(2025,3,10),
+                Puesto.ANALISTA,
+                new BigDecimal("500000")
+        );
+
+        Empleado empleado2 = Empleado.instance(
+                UUID.randomUUID(),
+                "Maria Lopez",
+                "DEF5678",
+                LocalDate.of(2025,5,15),
+                Puesto.SUPERVISOR,
+                new BigDecimal("800000")
+
+        );
+
+        empleadoRepository.guardar(empleado1);
+        empleadoRepository.guardar(empleado2);
+
+        List<Empleado> resultado = empleadoRepository.listarTodos();
+
+        assertEquals(2, resultado.size());
+        assertTrue(resultado.stream()
+                .anyMatch(empleado -> empleado.getLegajo().equals("ABC1234")));
+        assertTrue(resultado.stream()
+                .anyMatch(empleado -> empleado.getLegajo().equals("DEF5678")));
 
     }
 }
